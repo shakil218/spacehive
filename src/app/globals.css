@@ -1,2 +1,16 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+
+/* Remove Chrome autofill background */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: inherit !important;
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+  transition: background-color 9999s ease-in-out 0s;
+}

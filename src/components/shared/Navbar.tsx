@@ -57,8 +57,8 @@ export default function Navbar() {
             {!session && (
               <>
                 <div className="divider my-1"></div>
-                <li><Link href="/login">Log In</Link></li>
-                <li><Link href="/register" className="bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 bg-clip-text text-transparent hover:opacity-90 transition-opacity duration-200 font-semibold">Sign Up</Link></li>
+                <li><Link href="/auth/signin">Log In</Link></li>
+                <li><Link href="/auth/signup" className="bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 bg-clip-text text-transparent hover:opacity-90 transition-opacity duration-200 font-semibold">Sign Up</Link></li>
               </>
             )}
           </ul>
@@ -124,11 +124,11 @@ export default function Navbar() {
           </div>
         ) : (
           <>
-            <Link href="/login" className="btn btn-ghost hidden sm:inline-flex hover:bg-base-200 transition-colors">
+            <Link href="/auth/signin" className="btn btn-ghost hidden sm:inline-flex hover:bg-base-200 transition-colors">
               Log In
             </Link>
             <Link 
-              href="/register" 
+              href="/auth/signup" 
               className="btn border-none text-white bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 hover:from-violet-700 hover:via-pink-600 hover:to-amber-500 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
             >
               Sign Up
