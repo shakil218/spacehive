@@ -6,7 +6,7 @@ import WhyChooseUs from "@/components/home/WhyChooseUs";
 // import StatsSection from "@/components/home/StatsSection";
 import Testimonials from "@/components/home/Testimonials";
 import FAQSection from "@/components/home/FAQSection";
-// import NewsletterCTA from "@/components/home/NewsletterCTA";
+import NewsletterCTA from "@/components/home/NewsletterCTA";
 
 export default function Home() {
   return (
@@ -19,7 +19,7 @@ export default function Home() {
       {/* <StatsSection /> */}
       <Testimonials />
       <FAQSection />
-      {/* <NewsletterCTA /> */}
+      <NewsletterCTA />
     </>
   );
 }
