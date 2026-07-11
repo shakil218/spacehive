@@ -4,7 +4,7 @@ import CategorySection from "@/components/home/CategorySection";
 import HowItWorks from "@/components/home/HowItWorks";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 // import StatsSection from "@/components/home/StatsSection";
-// import Testimonials from "@/components/home/Testimonials";
+import Testimonials from "@/components/home/Testimonials";
 // import FAQSection from "@/components/home/FAQSection";
 // import NewsletterCTA from "@/components/home/NewsletterCTA";
 
@@ -17,7 +17,7 @@ export default function Home() {
       <HowItWorks />
       <WhyChooseUs />
       {/* <StatsSection /> */}
-      {/* <Testimonials /> */}
+      <Testimonials />
       {/* <FAQSection /> */}
       {/* <NewsletterCTA /> */}
     </>
