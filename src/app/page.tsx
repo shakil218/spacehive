@@ -2,7 +2,7 @@ import Hero from "@/components/home/Hero";
 import CategorySection from "@/components/home/CategorySection";
 // import FeaturedSpaces from "@/components/home/FeaturedSpaces";
 import HowItWorks from "@/components/home/HowItWorks";
-// import WhyChooseUs from "@/components/home/WhyChooseUs";
+import WhyChooseUs from "@/components/home/WhyChooseUs";
 // import StatsSection from "@/components/home/StatsSection";
 // import Testimonials from "@/components/home/Testimonials";
 // import FAQSection from "@/components/home/FAQSection";
@@ -15,7 +15,7 @@ export default function Home() {
       <CategorySection />
       {/* <FeaturedSpaces /> */}
       <HowItWorks />
-      {/* <WhyChooseUs /> */}
+      <WhyChooseUs />
       {/* <StatsSection /> */}
       {/* <Testimonials /> */}
       {/* <FAQSection /> */}

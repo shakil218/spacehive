@@ -25,7 +25,7 @@ export default function HowItWorks() {
   return (
     <section className="max-w-7xl mx-auto px-4 md:px-8 py-16">
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold">How It Works</h2>
+        <h2 className="text-3xl font-bold">How It <span className="bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 bg-clip-text text-transparent">Works</span></h2>
         <p className="text-base-content/60 mt-2">
           From search to booking in three simple steps.
         </p>
