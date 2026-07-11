@@ -1,5 +1,5 @@
 import Hero from "@/components/home/Hero";
-// import CategorySection from "@/components/home/CategorySection";
+import CategorySection from "@/components/home/CategorySection";
 // import FeaturedSpaces from "@/components/home/FeaturedSpaces";
 // import HowItWorks from "@/components/home/HowItWorks";
 // import WhyChooseUs from "@/components/home/WhyChooseUs";
@@ -12,8 +12,8 @@ export default function Home() {
   return (
     <>
       <Hero />
-      {/* <CategorySection />
-      <FeaturedSpaces />
+      <CategorySection />
+      {/* <FeaturedSpaces />
       <HowItWorks />
       <WhyChooseUs />
       <StatsSection />
