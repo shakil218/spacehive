@@ -38,7 +38,7 @@ export default function HowItWorks() {
             className="group relative rounded-3xl border border-base-200 bg-base-100/80 p-8 pt-10 text-center shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10"
           >
             {/* Step Number */}
-            <div className="absolute -top-5 left-6 flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 text-lg font-bold text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
+            <div className="absolute -top-5 left-6 flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-violet-600 via-pink-500 to-amber-400 text-lg font-bold text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
               {i + 1}
             </div>
 

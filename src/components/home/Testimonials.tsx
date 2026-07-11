@@ -65,7 +65,7 @@ export default function Testimonials() {
               className="group rounded-3xl border border-base-300 bg-base-100/80 p-8 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/10"
             >
               {/* Quote Icon */}
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 text-white shadow-lg">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-violet-600 via-pink-500 to-amber-400 text-white shadow-lg">
                 <Quote size={20} />
               </div>
 
