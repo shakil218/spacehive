@@ -87,6 +87,7 @@ export default function Hero() {
             <button
               type="submit"
               className="btn border-none rounded-full px-6 text-white bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 hover:brightness-110 hover:shadow-md transition-all"
+              suppressHydrationWarning
             >
               Search
             </button>
