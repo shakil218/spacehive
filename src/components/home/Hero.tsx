@@ -82,6 +82,7 @@ export default function Hero() {
               name="search"
               placeholder="Search by name, city, or category..."
               className="input input-ghost grow focus:outline-none border-none bg-transparent"
+              suppressHydrationWarning
             />
             <button
               type="submit"

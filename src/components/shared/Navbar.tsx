@@ -130,7 +130,7 @@ export default function Navbar() {
       {/* Auth area */}
       <div className="navbar-end gap-2">
         {isPending ? (
-          <span className="loading loading-spinner loading-sm text-primary" />
+          <span className="loading loading-spinner loading-sm text-secondary" />
         ) : session ? (
           <div className="dropdown dropdown-end">
             <div
