@@ -2,90 +2,93 @@
 
 import SpaceCard from "@/components/cards/SpaceCard";
 import SpaceCardSkeleton from "@/components/cards/SpaceCardSkeleton";
-import { useSpaces } from "@/hooks/useSpaces";
+import { PaginatedSpaces } from "@/types/space";
 
-export default function SpacesGrid() {
-  const {
-    data: spaces,
-    isPending,
-    isError,
-    error,
-    refetch,
-  } = useSpaces();
+interface SpacesGridProps {
+  data?: PaginatedSpaces;
+  isPending: boolean;
+  isError: boolean;
+}
 
+export default function SpacesGrid({
+  data,
+  isPending,
+  isError,
+}: SpacesGridProps) {
   // Loading State
   if (isPending) {
     return (
-      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-        {Array.from({ length: 8 }).map((_, index) => (
-          <SpaceCardSkeleton key={index} />
-        ))}
-      </div>
+      <section>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <SpaceCardSkeleton key={index} />
+          ))}
+        </div>
+      </section>
     );
   }
 
   // Error State
   if (isError) {
-    console.error(error);
-
     return (
-      <div className="rounded-3xl border border-error/20 bg-error/5 p-12 text-center">
-        <h3 className="text-2xl font-semibold text-error">
+      <section className="rounded-3xl border border-error/20 bg-error/5 p-12 text-center">
+        <h2 className="text-2xl font-bold text-error">
           Failed to load spaces
-        </h3>
+        </h2>
 
-        <p className="mt-3 text-base-content/60">
-          Something went wrong while loading the available spaces.
+        <p className="mt-2 text-base-content/70">
+          Something went wrong while fetching spaces.
         </p>
-
-        <button
-          onClick={() => refetch()}
-          className="btn btn-error btn-outline rounded-full mt-6"
-        >
-          Try Again
-        </button>
-      </div>
+      </section>
     );
   }
 
   // Empty State
-  if (!spaces || spaces.length === 0) {
+  if (!data || data.spaces.length === 0) {
     return (
-      <div className="rounded-3xl border border-base-300 bg-base-100 p-16 text-center">
-        <h3 className="text-2xl font-semibold">
-          No Spaces Found
-        </h3>
+      <section className="rounded-3xl border border-base-300 p-16 text-center">
+        <h2 className="text-2xl font-bold">
+          No spaces found
+        </h2>
 
-        <p className="mt-3 text-base-content/60">
-          There are no spaces available at the moment.
+        <p className="mt-2 text-base-content/60">
+          Try changing your search or filters.
         </p>
-      </div>
+      </section>
     );
   }
 
-  // Success State
   return (
-    <>
+    <section className="space-y-6">
+
       {/* Result Count */}
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-semibold">
-          {spaces.length} Spaces Available
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">
+          Available Spaces
         </h2>
 
         <p className="text-sm text-base-content/60">
-          Showing all available spaces
+          Showing{" "}
+          <span className="font-semibold">
+            {data.spaces.length}
+          </span>{" "}
+          of{" "}
+          <span className="font-semibold">
+            {data.totalSpaces}
+          </span>{" "}
+          spaces
         </p>
       </div>
 
-      {/* Cards */}
-      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-        {spaces.map((space) => (
+      {/* Grid */}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {data.spaces.map((space) => (
           <SpaceCard
             key={space._id}
             space={space}
           />
         ))}
       </div>
-    </>
+    </section>
   );
 }

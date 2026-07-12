@@ -9,3 +9,25 @@ export interface Space {
   rating: number;
   date: string;
 }
+
+export interface SpaceFilters {
+  search?: string;
+  category?: string;
+  location?: string;
+  rating?: number;
+
+  // Sorting
+  sort?: "newest" | "rating" | "price-low" | "price-high";
+
+  // Pagination
+  page?: number;
+  limit?: number;
+}
+
+export interface PaginatedSpaces {
+  spaces: Space[];
+  totalSpaces: number;
+  currentPage: number;
+  totalPages: number;
+  limit: number;
+}

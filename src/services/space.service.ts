@@ -1,5 +1,9 @@
 import axiosInstance from "@/lib/axios";
-import { Space } from "@/types/space";
+import {
+  PaginatedSpaces,
+  Space,
+  SpaceFilters,
+} from "@/types/space";
 
 // Featured Spaces
 export const getFeaturedSpaces = async (): Promise<Space[]> => {
@@ -8,13 +12,20 @@ export const getFeaturedSpaces = async (): Promise<Space[]> => {
 };
 
 // All Spaces
-export const getAllSpaces = async (): Promise<Space[]> => {
-  const { data } = await axiosInstance.get("/api/spaces");
+export const getAllSpaces = async (
+  filters: SpaceFilters
+): Promise<PaginatedSpaces> => {
+  const { data } = await axiosInstance.get("/api/spaces", {
+    params: filters,
+  });
+
   return data;
 };
 
 // Single Space
-export const getSpaceById = async (id: string): Promise<Space> => {
+export const getSpaceById = async (
+  id: string
+): Promise<Space> => {
   const { data } = await axiosInstance.get(`/api/spaces/${id}`);
   return data;
 };
