@@ -10,7 +10,11 @@ import BookingSummary from "./BookingSummary";
 import BookingDatePicker from "./BookingDatePicker";
 import BookingGuests from "./BookingGuests";
 
-import { useCreateBooking } from "@/hooks/useBookings";
+import {
+  useCreateBooking,
+  useCreateCheckoutSession,
+} from "@/hooks/useBookings";
+
 import { authClient } from "@/lib/auth-client";
 
 interface BookingModalProps {
@@ -29,7 +33,8 @@ export default function BookingModal({
 
   const { data: session } = authClient.useSession();
 
-  const { mutate, isPending } = useCreateBooking();
+  const createBookingMutation = useCreateBooking();
+  const checkoutMutation = useCreateCheckoutSession();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -53,7 +58,7 @@ export default function BookingModal({
 
   const totalPrice = guests * space.price;
 
-  const handleBooking = () => {
+  const handleCheckout = async () => {
     if (!bookingDate) {
       toast.error("Please select a booking date.");
       return;
@@ -64,8 +69,9 @@ export default function BookingModal({
       return;
     }
 
-    mutate(
-      {
+    try {
+      // Step 1: Create booking
+      const bookingRes = await createBookingMutation.mutateAsync({
         userId: session.user.id,
         userName: session.user.name,
         userEmail: session.user.email,
@@ -80,22 +86,20 @@ export default function BookingModal({
 
         pricePerDay: space.price,
         totalPrice,
-      },
-      {
-        onSuccess: () => {
-          toast.success("Booking created successfully.");
+      });
 
-          setBookingDate("");
-          setGuests(1);
+      // Step 2: Create Stripe Checkout Session
+      const sessionRes =
+        await checkoutMutation.mutateAsync(
+          bookingRes.insertedId
+        );
 
-          onClose();
-        },
-
-        onError: () => {
-          toast.error("Failed to create booking.");
-        },
-      },
-    );
+      // Step 3: Redirect to Stripe
+      window.location.href = sessionRes.url;
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to start payment.");
+    }
   };
 
   return (
@@ -108,9 +112,10 @@ export default function BookingModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-
         <div className="sticky top-0 z-20 flex items-center justify-between border-b border-base-300 bg-base-100 px-6 py-5">
-          <h2 className="text-2xl font-bold">Book Your Space</h2>
+          <h2 className="text-2xl font-bold">
+            Book Your Space
+          </h2>
 
           <button
             onClick={onClose}
@@ -122,7 +127,6 @@ export default function BookingModal({
         </div>
 
         {/* Body */}
-
         <div className="space-y-6 p-6">
           <BookingSummary space={space} />
 
@@ -139,10 +143,11 @@ export default function BookingModal({
           />
 
           {/* Total */}
-
           <div className="rounded-2xl bg-base-200 p-5">
             <div className="flex items-center justify-between">
-              <span className="text-lg font-semibold">Total</span>
+              <span className="text-lg font-semibold">
+                Total
+              </span>
 
               <span className="text-3xl font-bold text-primary">
                 ${totalPrice}
@@ -150,18 +155,25 @@ export default function BookingModal({
             </div>
 
             <p className="mt-2 text-sm text-base-content/60">
-              {guests} Guest{guests > 1 ? "s" : ""} × ${space.price} per day
+              {guests} Guest
+              {guests > 1 ? "s" : ""} × ${space.price} per day
             </p>
           </div>
 
-          {/* Button */}
-
+          {/* Continue */}
           <button
-            onClick={handleBooking}
-            disabled={!bookingDate || isPending}
+            onClick={handleCheckout}
+            disabled={
+              !bookingDate ||
+              createBookingMutation.isPending ||
+              checkoutMutation.isPending
+            }
             className="btn w-full rounded-2xl border-0 bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isPending ? "Creating Booking..." : "Continue to Payment"}
+            {createBookingMutation.isPending ||
+            checkoutMutation.isPending
+              ? "Redirecting..."
+              : "Continue to Payment"}
           </button>
         </div>
       </div>
