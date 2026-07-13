@@ -11,6 +11,7 @@ export const createBooking = async (booking: Booking) => {
   return data;
 };
 
+
 // Create Stripe Checkout Session
 export const createCheckoutSession = async (
   bookingId: string
@@ -20,6 +21,18 @@ export const createCheckoutSession = async (
     {
       bookingId,
     }
+  );
+  
+  return data;
+};
+
+
+// Get User Bookings
+export const getUserBookings = async (
+  userId: string
+) => {
+  const { data } = await axiosInstance.get(
+    `/api/bookings/user/${userId}`
   );
 
   return data;

@@ -1,4 +1,6 @@
 export interface Booking {
+  _id: string;
+
   userId: string;
   userName: string;
   userEmail: string;
@@ -9,9 +11,14 @@ export interface Booking {
   location: string;
 
   bookingDate: string;
-
   guests: number;
 
   pricePerDay: number;
   totalPrice: number;
+
+  paymentStatus: string;
+  bookingStatus: string;
+
+  stripeSessionId?: string | null;
+  stripePaymentIntentId?: string | null;
 }
