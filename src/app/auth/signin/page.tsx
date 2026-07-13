@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import { signIn } from "@/lib/auth-client";
-import { DEMO_USER } from "@/lib/demo-credentials";
+import { DEMO_USER, DEMO_ADMIN } from "@/lib/demo-credentials";
 
 const loginSchema = z.object({
   email: z
@@ -61,10 +61,10 @@ export default function SignInPage() {
   };
 
   const handleDemoLogin = async () => {
-    setValue("email", DEMO_USER.email);
-    setValue("password", DEMO_USER.password);
+    setValue("email", DEMO_ADMIN.email);
+    setValue("password", DEMO_ADMIN.password);
     setIsDemoLoading(true);
-    await doLogin(DEMO_USER);
+    await doLogin(DEMO_ADMIN);
     setIsDemoLoading(false);
   };
 

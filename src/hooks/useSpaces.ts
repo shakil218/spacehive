@@ -5,6 +5,7 @@ import {
   getAllSpaces,
   getFeaturedSpaces,
   getSpaceById,
+  getRelatedSpaces,
 } from "@/services/space.service";
 import { SpaceFilters } from "@/types/space";
 
@@ -35,6 +36,16 @@ export function useSpace(id: string) {
   return useQuery({
     queryKey: ["space", id],
     queryFn: () => getSpaceById(id),
+    enabled: !!id,
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
+// Related Spaces
+export function useRelatedSpaces(id: string) {
+  return useQuery({
+    queryKey: ["related-spaces", id],
+    queryFn: () => getRelatedSpaces(id),
     enabled: !!id,
     staleTime: 1000 * 60 * 5,
   });

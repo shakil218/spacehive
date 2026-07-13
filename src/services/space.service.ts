@@ -29,3 +29,14 @@ export const getSpaceById = async (
   const { data } = await axiosInstance.get(`/api/spaces/${id}`);
   return data;
 };
+
+// Related Spaces
+export const getRelatedSpaces = async (
+  id: string
+): Promise<Space[]> => {
+  const { data } = await axiosInstance.get(
+    `/api/spaces/related/${id}`
+  );
+
+  return data;
+};

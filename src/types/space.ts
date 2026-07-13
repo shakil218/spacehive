@@ -2,12 +2,18 @@ export interface Space {
   _id: string;
   title: string;
   shortDescription: string;
+  description: string;
   imageUrl: string;
   category: string;
   location: string;
   price: number;
   rating: number;
-  date: string;
+  capacity: number;
+  availableFrom: string;
+  hostName: string;
+  amenities: string[];
+  featured: boolean;
+  status: string;
 }
 
 export interface SpaceFilters {
