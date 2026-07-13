@@ -36,6 +36,9 @@ export default function BookingModal({
   const createBookingMutation = useCreateBooking();
   const checkoutMutation = useCreateCheckoutSession();
 
+  const isLoading =
+    createBookingMutation.isPending || checkoutMutation.isPending;
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -59,6 +62,8 @@ export default function BookingModal({
   const totalPrice = guests * space.price;
 
   const handleCheckout = async () => {
+    if (isLoading) return;
+
     if (!bookingDate) {
       toast.error("Please select a booking date.");
       return;
@@ -70,8 +75,8 @@ export default function BookingModal({
     }
 
     try {
-      // Step 1: Create booking
-      const bookingRes = await createBookingMutation.mutateAsync({
+      // Step 1: Save booking
+      const booking = await createBookingMutation.mutateAsync({
         userId: session.user.id,
         userName: session.user.name,
         userEmail: session.user.email,
@@ -89,16 +94,20 @@ export default function BookingModal({
       });
 
       // Step 2: Create Stripe Checkout Session
-      const sessionRes =
+      const checkout =
         await checkoutMutation.mutateAsync(
-          bookingRes.insertedId
+          booking.insertedId
         );
 
-      // Step 3: Redirect to Stripe
-      window.location.href = sessionRes.url;
+      toast.success("Redirecting to Stripe...");
+
+      window.location.href = checkout.url;
     } catch (error) {
       console.error(error);
-      toast.error("Failed to start payment.");
+
+      toast.error(
+        "Something went wrong. Please try again."
+      );
     }
   };
 
@@ -155,24 +164,19 @@ export default function BookingModal({
             </div>
 
             <p className="mt-2 text-sm text-base-content/60">
-              {guests} Guest
-              {guests > 1 ? "s" : ""} × ${space.price} per day
+              {guests} Guest{guests > 1 ? "s" : ""} × $
+              {space.price} per day
             </p>
           </div>
 
           {/* Continue */}
           <button
             onClick={handleCheckout}
-            disabled={
-              !bookingDate ||
-              createBookingMutation.isPending ||
-              checkoutMutation.isPending
-            }
+            disabled={!bookingDate || isLoading}
             className="btn w-full rounded-2xl border-0 bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {createBookingMutation.isPending ||
-            checkoutMutation.isPending
-              ? "Redirecting..."
+            {isLoading
+              ? "Redirecting to Stripe..."
               : "Continue to Payment"}
           </button>
         </div>
