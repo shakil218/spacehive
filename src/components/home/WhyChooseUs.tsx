@@ -38,7 +38,7 @@ export default function WhyChooseUs() {
           {features.map((f) => (
             <div
               key={f.title}
-              className="card bg-base-100 border border-base-300 rounded-2xl p-6"
+              className="group rounded-3xl border border-base-300 bg-base-100 p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl"
             >
               <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-r from-violet-600/10 via-pink-500/10 to-amber-400/10 text-pink-500 transition-all duration-300 group-hover:scale-110 ">
               

@@ -32,7 +32,12 @@ export default function SpaceClient({ id }: { id: string }) {
 
   return (
     <main className="max-w-7xl mx-auto px-4 md:px-8 py-10 space-y-12">
-      <SpaceGallery imageUrl={space.imageUrl} title={space.title} />
+      <SpaceGallery
+        imageUrl={space.imageUrl}
+        title={space.title}
+        availableFrom={space.availableFrom}
+        capacity={space.capacity}
+      />
 
       <div className="grid items-start gap-10 lg:grid-cols-3">
         <div className="space-y-12 lg:col-span-2">
