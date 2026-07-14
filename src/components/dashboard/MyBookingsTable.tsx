@@ -1,114 +1,200 @@
 "use client";
 
 import Image from "next/image";
-import { Eye, XCircle } from "lucide-react";
+import { MapPin, Eye, XCircle } from "lucide-react";
+import { toast } from "sonner";
 
 import { Booking } from "@/types/booking";
+import { useCancelBooking } from "@/hooks/useBookings";
 
 interface Props {
   bookings: Booking[];
+  onDetails?: (bookingId: string) => void;
 }
 
 export default function MyBookingsTable({
   bookings,
+  onDetails,
 }: Props) {
+  const { mutate: cancelBooking, isPending } = useCancelBooking();
+
+  const handleCancelBooking = (id: string) => {
+    cancelBooking(id, {
+      onSuccess: () => {
+        toast.success("Booking cancelled successfully.");
+      },
+
+      onError: (error: any) => {
+        toast.error(
+          error?.response?.data?.message ??
+            "Failed to cancel booking.",
+        );
+      },
+    });
+  };
+
+  const confirmCancelBooking = (bookingId: string) => {
+    toast("Cancel this booking?", {
+      description: "This action cannot be undone.",
+
+      action: {
+        label: "Yes, Cancel",
+        onClick: () => handleCancelBooking(bookingId),
+      },
+
+      cancel: {
+        label: "Keep",
+        onClick: () => {},
+      },
+
+      duration: 10000,
+    });
+  };
+
   return (
-    <div className="overflow-x-auto rounded-3xl border border-base-300 bg-base-100 shadow">
+    <div className="overflow-x-auto rounded-3xl border border-base-300 bg-base-100 shadow-lg">
       <table className="table">
-        <thead>
+        <thead className="bg-base-200">
           <tr>
+            <th>#</th>
             <th>Space</th>
             <th>Date</th>
             <th>Guests</th>
             <th>Total</th>
             <th>Payment</th>
             <th>Status</th>
-            <th className="text-center">
-              Actions
-            </th>
+            <th className="text-center">Actions</th>
           </tr>
         </thead>
 
         <tbody>
-          {bookings.map((booking) => (
-            <tr key={booking._id}>
-              <td>
-                <div className="flex items-center gap-4">
-                  <Image
-                    src={booking.imageUrl}
-                    alt={booking.title}
-                    width={70}
-                    height={70}
-                    className="rounded-xl object-cover"
-                  />
+          {bookings.length === 0 ? (
+            <tr>
+              <td colSpan={8} className="py-12 text-center">
+                <p className="text-lg font-semibold">
+                  No bookings found
+                </p>
 
-                  <div>
-                    <h2 className="font-semibold">
-                      {booking.title}
-                    </h2>
-
-                    <p className="text-sm text-base-content/60">
-                      {booking.location}
-                    </p>
-                  </div>
-                </div>
-              </td>
-
-              <td>{booking.bookingDate}</td>
-
-              <td>{booking.guests}</td>
-
-              <td className="font-semibold">
-                ${booking.totalPrice}
-              </td>
-
-              <td>
-                <span
-                  className={`badge ${
-                    booking.paymentStatus === "paid"
-                      ? "badge-success"
-                      : "badge-warning"
-                  }`}
-                >
-                  {booking.paymentStatus}
-                </span>
-              </td>
-
-              <td>
-                <span
-                  className={`badge ${
-                    booking.bookingStatus === "confirmed"
-                      ? "badge-success"
-                      : "badge-neutral"
-                  }`}
-                >
-                  {booking.bookingStatus}
-                </span>
-              </td>
-
-              <td>
-                <div className="flex justify-center gap-2">
-                  <button className="btn btn-sm btn-outline btn-info">
-                    <Eye size={16} />
-                    Details
-                  </button>
-
-                  <button
-                    className="btn btn-sm btn-error"
-                    disabled={
-                      booking.bookingStatus ===
-                        "cancelled" ||
-                      booking.paymentStatus ===
-                        "paid"
-                    }
-                  >
-                    <XCircle size={16} />
-                    Cancel
-                  </button>
-                </div>
+                <p className="mt-1 text-sm text-base-content/60">
+                  Start booking your favorite spaces.
+                </p>
               </td>
             </tr>
-          ))}
+          ) : (
+            bookings.map((booking, index) => (
+              <tr
+                key={booking._id}
+                className="hover:bg-base-200/40 transition-colors"
+              >
+                {/* Serial */}
+                <td className="font-semibold">
+                  {index + 1}
+                </td>
+
+                {/* Space */}
+                <td>
+                  <div className="flex items-center gap-4">
+                    <Image
+                      src={booking.imageUrl}
+                      alt={booking.title}
+                      width={70}
+                      height={70}
+                      className="rounded-xl object-cover"
+                    />
+
+                    <div>
+                      <h2 className="font-semibold">
+                        {booking.title}
+                      </h2>
+
+                      <p className="inline-flex items-center gap-1 text-sm text-base-content/60">
+                        <MapPin size={12} /> {booking.location}
+                      </p>
+                    </div>
+                  </div>
+                </td>
+
+                {/* Date */}
+                <td>
+                  {new Date(
+                    booking.bookingDate
+                  ).toLocaleDateString()}
+                </td>
+
+                {/* Guests */}
+                <td>{booking.guests}</td>
+
+                {/* Price */}
+                <td className="font-bold text-primary">
+                  ${booking.totalPrice}
+                </td>
+
+                {/* Payment */}
+                <td>
+                  <span
+                    className={`badge ${
+                      booking.paymentStatus === "paid"
+                        ? "badge-success"
+                        : "badge-warning"
+                    }`}
+                  >
+                    {booking.paymentStatus}
+                  </span>
+                </td>
+
+                {/* Booking Status */}
+                <td>
+                  <span
+                    className={`badge ${
+                      booking.bookingStatus === "confirmed"
+                        ? "badge-success"
+                        : booking.bookingStatus === "cancelled"
+                          ? "badge-error"
+                          : "badge-neutral"
+                    }`}
+                  >
+                    {booking.bookingStatus}
+                  </span>
+                </td>
+
+                {/* Actions */}
+                <td>
+                  <div className="flex justify-center gap-2">
+                    <button
+                      onClick={() =>
+                        onDetails?.(booking._id)
+                      }
+                      className="btn btn-sm btn-outline btn-info"
+                    >
+                      <Eye size={16} />
+                      Details
+                    </button>
+
+                    <button
+                      onClick={() =>
+                        confirmCancelBooking(
+                          booking._id
+                        )
+                      }
+                      disabled={
+                        isPending ||
+                        booking.bookingStatus ===
+                          "cancelled" ||
+                        booking.paymentStatus ===
+                          "paid"
+                      }
+                      className="btn btn-sm btn-error"
+                    >
+                      <XCircle size={16} />
+                      {isPending
+                        ? "Cancelling..."
+                        : "Cancel"}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

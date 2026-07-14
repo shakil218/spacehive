@@ -1,8 +1,9 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
+  cancelBooking,
   createBooking,
   createCheckoutSession,
   getUserBookings,
@@ -36,5 +37,20 @@ export function useUserBookings(userId?: string) {
     queryFn: () => getUserBookings(userId!),
 
     enabled: !!userId,
+  });
+}
+
+// Cancel User Booking
+export function useCancelBooking() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: cancelBooking,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user-bookings"],
+      });
+    },
   });
 }
