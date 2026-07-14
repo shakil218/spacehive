@@ -6,6 +6,7 @@ import {
   cancelBooking,
   createBooking,
   createCheckoutSession,
+  deleteBooking,
   getBookingById,
   getUserBookings,
 } from "@/services/booking.service";
@@ -58,6 +59,21 @@ export function useCancelBooking() {
 
   return useMutation({
     mutationFn: cancelBooking,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user-bookings"],
+      });
+    },
+  });
+}
+
+// Delete Booking
+export function useDeleteBooking() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteBooking,
 
     onSuccess: () => {
       queryClient.invalidateQueries({

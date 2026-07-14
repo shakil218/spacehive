@@ -71,7 +71,7 @@ export default function BookingDetailsModal({
                   className="object-cover"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
 
                 <div className="absolute bottom-6 left-6 text-white">
                   <h1 className="text-3xl font-bold">

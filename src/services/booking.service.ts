@@ -55,3 +55,12 @@ export const cancelBooking = async (id: string) => {
 
   return data;
 };
+
+// Delete Booking
+export const deleteBooking = async (id: string) => {
+  const { data } = await axiosInstance.delete(
+    `/api/bookings/${id}`
+  );
+
+  return data;
+};
