@@ -2,21 +2,47 @@
 
 import Image from "next/image";
 import axios from "axios";
-import { Eye, MapPin, Trash2, XCircle } from "lucide-react";
+import {
+  Download,
+  Eye,
+  MapPin,
+  Trash2,
+  XCircle,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Booking } from "@/types/booking";
-import { useCancelBooking, useDeleteBooking } from "@/hooks/useBookings";
+import {
+  useCancelBooking,
+  useDeleteBooking,
+} from "@/hooks/useBookings";
+import { generateBookingInvoice } from "@/utils/generateBookingInvoice";
 
 interface Props {
   bookings: Booking[];
   onDetails?: (bookingId: string) => void;
 }
 
-export default function MyBookingsTable({ bookings, onDetails }: Props) {
-  const { mutate: cancelBooking, isPending: isCancelling } = useCancelBooking();
+export default function MyBookingsTable({
+  bookings,
+  onDetails,
+}: Props) {
+  const {
+    mutate: cancelBooking,
+    isPending: isCancelling,
+  } = useCancelBooking();
 
-  const { mutate: deleteBooking, isPending: isDeleting } = useDeleteBooking();
+  const {
+    mutate: deleteBooking,
+    isPending: isDeleting,
+  } = useDeleteBooking();
+
+  // Download Invoice
+  const handleDownloadInvoice = (booking: Booking) => {
+    generateBookingInvoice(booking);
+
+    toast.success("Invoice downloaded successfully.");
+  };
 
   // Cancel Booking
   const handleCancelBooking = (id: string) => {
@@ -28,8 +54,10 @@ export default function MyBookingsTable({ bookings, onDetails }: Props) {
       onError: (error) => {
         if (axios.isAxiosError(error)) {
           toast.error(
-            error.response?.data?.message ?? "Failed to cancel booking.",
+            error.response?.data?.message ??
+              "Failed to cancel booking."
           );
+
           return;
         }
 
@@ -48,8 +76,10 @@ export default function MyBookingsTable({ bookings, onDetails }: Props) {
       onError: (error) => {
         if (axios.isAxiosError(error)) {
           toast.error(
-            error.response?.data?.message ?? "Failed to delete booking.",
+            error.response?.data?.message ??
+              "Failed to delete booking."
           );
+
           return;
         }
 
@@ -61,11 +91,13 @@ export default function MyBookingsTable({ bookings, onDetails }: Props) {
   // Cancel Confirmation
   const confirmCancelBooking = (bookingId: string) => {
     toast("Cancel this booking?", {
-      description: "This action cannot be undone.",
+      description:
+        "This action cannot be undone.",
 
       action: {
         label: "Yes, Cancel",
-        onClick: () => handleCancelBooking(bookingId),
+        onClick: () =>
+          handleCancelBooking(bookingId),
       },
 
       cancel: {
@@ -80,11 +112,13 @@ export default function MyBookingsTable({ bookings, onDetails }: Props) {
   // Delete Confirmation
   const confirmDeleteBooking = (bookingId: string) => {
     toast("Delete this booking?", {
-      description: "This booking will be permanently removed.",
+      description:
+        "This booking will be permanently removed.",
 
       action: {
         label: "Delete",
-        onClick: () => handleDeleteBooking(bookingId),
+        onClick: () =>
+          handleDeleteBooking(bookingId),
       },
 
       cancel: {
@@ -108,18 +142,26 @@ export default function MyBookingsTable({ bookings, onDetails }: Props) {
             <th>Total</th>
             <th>Payment</th>
             <th>Status</th>
-            <th className="text-center">Actions</th>
+            <th className="text-center">
+              Actions
+            </th>
           </tr>
         </thead>
 
         <tbody>
           {bookings.length === 0 ? (
             <tr>
-              <td colSpan={8} className="py-12 text-center">
-                <p className="text-lg font-semibold">No bookings found</p>
+              <td
+                colSpan={8}
+                className="py-12 text-center"
+              >
+                <p className="text-lg font-semibold">
+                  No bookings found
+                </p>
 
                 <p className="mt-1 text-sm text-base-content/60">
-                  Start booking your favorite spaces.
+                  Start booking your favorite
+                  spaces.
                 </p>
               </td>
             </tr>
@@ -130,7 +172,9 @@ export default function MyBookingsTable({ bookings, onDetails }: Props) {
                 className="transition-colors hover:bg-base-200/40"
               >
                 {/* Serial */}
-                <td className="font-semibold">{index + 1}</td>
+                <td className="font-semibold">
+                  {index + 1}
+                </td>
 
                 {/* Space */}
                 <td>
@@ -144,7 +188,9 @@ export default function MyBookingsTable({ bookings, onDetails }: Props) {
                     />
 
                     <div>
-                      <h2 className="font-semibold">{booking.title}</h2>
+                      <h2 className="font-semibold">
+                        {booking.title}
+                      </h2>
 
                       <p className="inline-flex items-center gap-1 text-sm text-base-content/60">
                         <MapPin size={12} />
@@ -155,12 +201,16 @@ export default function MyBookingsTable({ bookings, onDetails }: Props) {
                 </td>
 
                 {/* Date */}
-                <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
+                <td>
+                  {new Date(
+                    booking.bookingDate
+                  ).toLocaleDateString()}
+                </td>
 
                 {/* Guests */}
                 <td>{booking.guests}</td>
 
-                {/* Price */}
+                {/* Total */}
                 <td className="font-bold text-primary">
                   ${booking.totalPrice}
                 </td>
@@ -169,7 +219,8 @@ export default function MyBookingsTable({ bookings, onDetails }: Props) {
                 <td>
                   <span
                     className={`badge ${
-                      booking.paymentStatus === "paid"
+                      booking.paymentStatus ===
+                      "paid"
                         ? "badge-success"
                         : "badge-warning"
                     }`}
@@ -182,9 +233,11 @@ export default function MyBookingsTable({ bookings, onDetails }: Props) {
                 <td>
                   <span
                     className={`badge ${
-                      booking.bookingStatus === "confirmed"
+                      booking.bookingStatus ===
+                      "confirmed"
                         ? "badge-success"
-                        : booking.bookingStatus === "cancelled"
+                        : booking.bookingStatus ===
+                            "cancelled"
                           ? "badge-error"
                           : "badge-neutral"
                     }`}
@@ -195,37 +248,76 @@ export default function MyBookingsTable({ bookings, onDetails }: Props) {
 
                 {/* Actions */}
                 <td>
-                  <div className="flex justify-center gap-2">
+                  <div className="flex flex-wrap justify-center gap-2">
+
+                    {/* Details */}
                     <button
-                      onClick={() => onDetails?.(booking._id)}
+                      onClick={() =>
+                        onDetails?.(booking._id)
+                      }
                       className="btn btn-sm btn-outline btn-info"
                     >
                       <Eye size={16} />
                       Details
                     </button>
 
-                    {booking.bookingStatus !== "cancelled" &&
-                      booking.paymentStatus !== "paid" && (
+                    {/* Download Invoice */}
+                    {booking.paymentStatus ===
+                      "paid" &&
+                      booking.bookingStatus ===
+                        "confirmed" && (
                         <button
-                          onClick={() => confirmCancelBooking(booking._id)}
+                          onClick={() =>
+                            handleDownloadInvoice(
+                              booking
+                            )
+                          }
+                          className="btn btn-sm btn-success"
+                        >
+                          <Download size={16} />
+                          Invoice
+                        </button>
+                      )}
+
+                    {/* Cancel */}
+                    {booking.bookingStatus !==
+                      "cancelled" &&
+                      booking.paymentStatus !==
+                        "paid" && (
+                        <button
+                          onClick={() =>
+                            confirmCancelBooking(
+                              booking._id
+                            )
+                          }
                           disabled={isCancelling}
                           className="btn btn-sm btn-error"
                         >
                           <XCircle size={16} />
 
-                          {isCancelling ? "Cancelling..." : "Cancel"}
+                          {isCancelling
+                            ? "Cancelling..."
+                            : "Cancel"}
                         </button>
                       )}
 
-                    {booking.bookingStatus === "cancelled" && (
+                    {/* Delete */}
+                    {booking.bookingStatus ===
+                      "cancelled" && (
                       <button
-                        onClick={() => confirmDeleteBooking(booking._id)}
+                        onClick={() =>
+                          confirmDeleteBooking(
+                            booking._id
+                          )
+                        }
                         disabled={isDeleting}
                         className="btn btn-sm btn-outline btn-error"
                       >
                         <Trash2 size={16} />
 
-                        {isDeleting ? "Deleting..." : "Delete"}
+                        {isDeleting
+                          ? "Deleting..."
+                          : "Delete"}
                       </button>
                     )}
                   </div>
