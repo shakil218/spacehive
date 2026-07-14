@@ -22,3 +22,22 @@ export interface Booking {
   stripeSessionId?: string | null;
   stripePaymentIntentId?: string | null;
 }
+
+export interface UserBookingStatistics {
+  month: string;
+  bookings: number;
+  spending: number;
+}
+
+export interface UserBookingSummary {
+  totalBookings: number;
+  confirmedBookings: number;
+  cancelledBookings: number;
+  totalSpent: number;
+}
+
+export interface UserBookingStatisticsResponse {
+  success: boolean;
+  summary: UserBookingSummary;
+  chartData: UserBookingStatistics[];
+}

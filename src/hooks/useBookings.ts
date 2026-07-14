@@ -9,8 +9,11 @@ import {
   deleteBooking,
   getBookingById,
   getUserBookings,
+  getUserBookingStatistics,
 } from "@/services/booking.service";
-
+import {
+  UserBookingStatisticsResponse,
+} from "@/types/booking";
 
 // Create Booking
 export function useCreateBooking() {
@@ -19,7 +22,6 @@ export function useCreateBooking() {
   });
 }
 
-
 // Create Stripe Checkout Session
 export function useCreateCheckoutSession() {
   return useMutation({
@@ -27,14 +29,10 @@ export function useCreateCheckoutSession() {
   });
 }
 
-
 // Get User Bookings
 export function useUserBookings(userId?: string) {
   return useQuery({
-    queryKey: [
-      "user-bookings",
-      userId,
-    ],
+    queryKey: ["user-bookings", userId],
 
     queryFn: () => getUserBookings(userId!),
 
@@ -80,5 +78,18 @@ export function useDeleteBooking() {
         queryKey: ["user-bookings"],
       });
     },
+  });
+}
+
+// Get User Booking Statistics
+export function useUserBookingStatistics(userId?: string) {
+  return useQuery<UserBookingStatisticsResponse>({
+    queryKey: ["user-booking-statistics", userId],
+
+    queryFn: () => getUserBookingStatistics(userId!),
+
+    enabled: !!userId,
+
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
