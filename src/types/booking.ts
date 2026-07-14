@@ -26,6 +26,7 @@ export interface Booking {
 export interface UserBookingStatistics {
   month: string;
   bookings: number;
+  cancelledBookings: number;
   spending: number;
 }
 

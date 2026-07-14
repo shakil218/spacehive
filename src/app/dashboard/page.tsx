@@ -6,7 +6,6 @@ import { useUserBookingStatistics } from "@/hooks/useBookings";
 
 import SummaryCards from "@/components/dashboard/SummaryCards";
 import UserBookingStatistics from "@/components/dashboard/UserBookingStatistics";
-import SpaceCardSkeleton from "@/components/cards/SpaceCardSkeleton";
 
 export default function DashboardPage() {
   const { data: session } = authClient.useSession();
@@ -15,14 +14,6 @@ export default function DashboardPage() {
 
   const { data: statisticsData, isLoading } = useUserBookingStatistics(userId);
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center py-20">
-        <SpaceCardSkeleton />
-      </div>
-    );
-  }
-
   return (
     <section
       className="
@@ -30,7 +21,7 @@ export default function DashboardPage() {
         max-w-7xl
         px-4 lg:px-8
         space-y-8
-        pb-16
+        py-16
       "
     >
       {/* Header */}
@@ -56,9 +47,21 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      <SummaryCards summary={statisticsData?.summary} />
+      {isLoading ? (
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="h-36 animate-pulse rounded-3xl bg-base-200"/>
+          ))}
+        </div>
+      ) : (
+        <SummaryCards summary={statisticsData?.summary} />
+      )}
 
-      <UserBookingStatistics data={statisticsData?.chartData ?? []} />
+      {isLoading ? (
+        <div className="h-130 animate-pulse rounded-3xl bg-base-200" />
+      ) : (
+        <UserBookingStatistics data={statisticsData?.chartData ?? []} />
+      )}
     </section>
   );
 }

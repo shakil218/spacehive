@@ -14,6 +14,7 @@ interface Props {
   data: {
     month: string;
     bookings: number;
+    cancelledBookings: number;
     spending: number;
   }[];
 }
@@ -86,16 +87,32 @@ export default function UserBookingStatistics({ data }: Props) {
                   payload.find((item) => item.dataKey === "bookings")?.value ??
                   0;
 
-                return (
-                  <div className="rounded-2xl border border-base-300 bg-base-100 p-4 shadow-xl">
-                    <p className="mb-3 text-sm font-bold">{label}</p>
+                const cancelledBookings =
+                  payload.find((item) => item.dataKey === "cancelledBookings")
+                    ?.value ?? 0;
 
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between gap-6">
+                return (
+                  <div
+                    className="
+          rounded-2xl
+          border
+          border-base-300
+          bg-base-100
+          p-4
+          shadow-xl
+          min-w-56
+        "
+                  >
+                    <p className="mb-4 font-bold">{label}</p>
+
+                    <div className="space-y-3">
+                      {/* Spending */}
+
+                      <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="h-3 w-3 rounded-full bg-blue-500" />
 
-                          <span className="text-sm">Spending</span>
+                          <span>Spending</span>
                         </div>
 
                         <span className="font-semibold text-blue-600">
@@ -103,15 +120,31 @@ export default function UserBookingStatistics({ data }: Props) {
                         </span>
                       </div>
 
-                      <div className="flex items-center justify-between gap-6">
+                      {/* Bookings */}
+
+                      <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="h-3 w-3 rounded-full bg-violet-500" />
 
-                          <span className="text-sm">Bookings</span>
+                          <span>Bookings</span>
                         </div>
 
                         <span className="font-semibold text-violet-600">
                           {bookings}
+                        </span>
+                      </div>
+
+                      {/* Cancelled */}
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="h-3 w-3 rounded-full bg-red-500" />
+
+                          <span>Cancelled</span>
+                        </div>
+
+                        <span className="font-semibold text-red-600">
+                          {cancelledBookings}
                         </span>
                       </div>
                     </div>
@@ -134,9 +167,20 @@ export default function UserBookingStatistics({ data }: Props) {
               }}
             />
 
+            {/* Hidden Area for Bookings */}
             <Area
               type="monotone"
               dataKey="bookings"
+              stroke="transparent"
+              fill="transparent"
+              dot={false}
+              activeDot={false}
+            />
+
+            {/* Hidden Area for Cancelled Bookings */}
+            <Area
+              type="monotone"
+              dataKey="cancelledBookings"
               stroke="transparent"
               fill="transparent"
               dot={false}
