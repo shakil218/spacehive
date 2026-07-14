@@ -38,6 +38,15 @@ export const getUserBookings = async (
   return data;
 };
 
+// Get Booking By Id
+export const getBookingById = async (id: string) => {
+  const { data } = await axiosInstance.get(
+    `/api/bookings/${id}`
+  );
+
+  return data;
+};
+
 // Cancel User Booking
 export const cancelBooking = async (id: string) => {
   const { data } = await axiosInstance.patch(

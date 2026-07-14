@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { CalendarDays } from "lucide-react";
 
@@ -9,11 +10,13 @@ import { Booking } from "@/types/booking";
 
 import MyBookingsTable from "@/components/dashboard/MyBookingsTable";
 import BookingsTableSkeleton from "@/components/dashboard/BookingsTableSkeleton";
+import BookingDetailsModal from "@/components/dashboard/BookingDetailsModal";
 
 export default function MyBookingsPage() {
   const { data: session } = authClient.useSession();
 
   const { data, isLoading } = useUserBookings(session?.user.id);
+  const [selectedBookingId, setSelectedBookingId] = useState<string | null>(null);
 
   if (isLoading) {
     return (
@@ -66,8 +69,9 @@ export default function MyBookingsPage() {
           </Link>
         </div>
       ) : (
-        <MyBookingsTable bookings={bookings} />
+        <MyBookingsTable bookings={bookings} onDetails={setSelectedBookingId} />
       )}
+      <BookingDetailsModal bookingId={selectedBookingId} open={!!selectedBookingId} onClose={() => setSelectedBookingId(null)} />
     </section>
   );
 }

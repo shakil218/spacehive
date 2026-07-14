@@ -6,6 +6,7 @@ import {
   cancelBooking,
   createBooking,
   createCheckoutSession,
+  getBookingById,
   getUserBookings,
 } from "@/services/booking.service";
 
@@ -37,6 +38,17 @@ export function useUserBookings(userId?: string) {
     queryFn: () => getUserBookings(userId!),
 
     enabled: !!userId,
+  });
+}
+
+// Get Booking By Id
+export function useBooking(id?: string) {
+  return useQuery({
+    queryKey: ["booking", id],
+
+    queryFn: () => getBookingById(id!),
+
+    enabled: !!id,
   });
 }
 
