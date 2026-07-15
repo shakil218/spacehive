@@ -12,9 +12,30 @@ const loggedOutLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
-const loggedInExtraLinks = [
-  { href: "/add-space", label: "Add Space" },
-  { href: "/dashboard/manage-users", label: "Manage Users" },
+const userLinks = [
+  {
+    href: "/dashboard/user",
+    label: "Dashboard",
+  },
+  {
+    href: "/dashboard/user/my-bookings",
+    label: "My Bookings",
+  },
+];
+
+const adminLinks = [
+  {
+    href: "/dashboard/admin",
+    label: "Dashboard",
+  },
+  {
+    href: "/dashboard/admin/add-space",
+    label: "Add Space",
+  },
+  {
+    href: "/dashboard/admin/manage-users",
+    label: "Manage Users",
+  },
 ];
 
 export default function Navbar() {
@@ -22,8 +43,11 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
 
+  // Default role is "user"
+  const role = session?.user?.role ?? "user";
+
   const links = session
-    ? [...loggedOutLinks, ...loggedInExtraLinks]
+    ? [...loggedOutLinks, ...(role === "admin" ? adminLinks : userLinks)]
     : loggedOutLinks;
 
   const handleSignOut = async () => {
@@ -32,8 +56,16 @@ export default function Navbar() {
     router.refresh();
   };
 
-  // Helper function to check if a link is active
-  const isActive = (href: string) => pathname === href;
+  const isActive = (href: string) => {
+    if (pathname === href) return true;
+
+    // Dashboard links should only be active on their exact page
+    if (href === "/dashboard/user" || href === "/dashboard/admin") {
+      return false;
+    }
+
+    return pathname.startsWith(href);
+  };
 
   return (
     <div className="navbar bg-base-100/40 border-b border-base-200 sticky top-0 z-50 px-4 md:px-8 backdrop-blur-md bg-opacity-90">
@@ -61,6 +93,7 @@ export default function Navbar() {
               />
             </svg>
           </div>
+
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-56 p-2 shadow-xl border border-base-200 text-lg font-semibold"
@@ -79,12 +112,15 @@ export default function Navbar() {
                 </Link>
               </li>
             ))}
+
             {!session && (
               <>
                 <div className="divider my-1"></div>
+
                 <li>
                   <Link href="/auth/signin">Log In</Link>
                 </li>
+
                 <li>
                   <Link
                     href="/auth/signup"
@@ -98,7 +134,7 @@ export default function Navbar() {
           </ul>
         </div>
 
-        {/* Logo with Pretty Linear Gradient */}
+        {/* Logo */}
         <Link
           href="/"
           className="text-xl font-black tracking-tight px-2 bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 bg-clip-text text-transparent hover:opacity-90 transition-opacity duration-200"
@@ -127,7 +163,7 @@ export default function Navbar() {
         </ul>
       </div>
 
-      {/* Auth area */}
+      {/* Auth */}
       <div className="navbar-end gap-2">
         {isPending ? (
           <span className="loading loading-spinner loading-sm text-secondary" />
@@ -139,7 +175,7 @@ export default function Navbar() {
               className="btn btn-ghost btn-circle avatar hover:scale-105 transition-transform"
             >
               <div className="relative w-10 h-10 rounded-full overflow-hidden ring ring-primary/20 ring-offset-2 ring-offset-base-100">
-                {session?.user.image ? (
+                {session.user.image ? (
                   <Image
                     src={session.user.image}
                     alt={session.user.name ?? "User"}
@@ -148,28 +184,37 @@ export default function Navbar() {
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 text-white font-semibold">
-                    {session?.user.name?.charAt(0).toUpperCase() ?? "U"}
+                    {session.user.name?.charAt(0).toUpperCase() ?? "U"}
                   </div>
                 )}
               </div>
             </div>
+
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow-xl border border-base-200"
             >
               <li className="menu-title border-b border-base-200 pb-2 mb-1 text-base-content/70">
-                Hi, {session?.user?.name}
+                Hi, {session.user.name}
               </li>
+
               <li>
-                <Link href="/items/manage">Manage Spaces</Link>
+                <Link
+                  href={
+                    role === "admin" ? "/dashboard/admin" : "/dashboard/user"
+                  }
+                >
+                  Dashboard
+                </Link>
               </li>
+
               <li>
                 <button
                   onClick={handleSignOut}
                   className="text-error hover:bg-error/10 active:bg-error/20"
                 >
                   <span>
-                    <LogOut className="h-4 w-4" />{" "}
+                    <LogOut className="h-4 w-4" />
                   </span>
                   Log Out
                 </button>
@@ -184,6 +229,7 @@ export default function Navbar() {
             >
               Log In
             </Link>
+
             <Link
               href="/auth/signup"
               className="btn border-none text-white bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 hover:from-violet-700 hover:via-pink-600 hover:to-amber-500 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"

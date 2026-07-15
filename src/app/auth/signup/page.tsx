@@ -75,7 +75,7 @@ export default function SignUpPage() {
       return;
     }
 
-    router.push("/spaces");
+    router.push("/");
     router.refresh();
   };
 

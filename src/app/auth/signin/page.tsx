@@ -50,7 +50,7 @@ export default function SignInPage() {
       return;
     }
 
-    router.push("/spaces");
+    router.push("/");
     router.refresh();
   };
 
@@ -69,7 +69,7 @@ export default function SignInPage() {
   };
 
   const handleGoogleLogin = async () => {
-    await signIn.social({ provider: "google", callbackURL: "/spaces" });
+    await signIn.social({ provider: "google", callbackURL: "/" });
   };
 
   return (

@@ -3,7 +3,7 @@ import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 
 const client = new MongoClient(process.env.MONGO_URI as string);
-const db = client.db('SpaceHive'); // Replace with your database name
+const db = client.db("SpaceHive"); // Replace with your database name
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, {
@@ -11,18 +11,20 @@ export const auth = betterAuth({
     client,
   }),
 
-   user: {
-  additionalFields: {
-    role: {
-      type: "string",
-      defaultValue: "user",
-    },
-    status: {
-      type: "string",
-      defaultValue: "active",
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: false,
+        defaultValue: "user",
+      },
+      status: {
+        type: "string",
+        required: false,
+        defaultValue: "active",
+      },
     },
   },
-},
 
   //...other options
   emailAndPassword: {
