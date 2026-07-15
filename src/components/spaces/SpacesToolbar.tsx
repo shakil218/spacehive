@@ -41,7 +41,6 @@ export default function SpacesToolbar({
     setFilters(() => ({
       search: "",
       category: "",
-      location: "",
       rating: undefined,
       sort: "newest",
       page: 1,
@@ -51,7 +50,7 @@ export default function SpacesToolbar({
 
   return (
     <section className="rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm">
-      <div className="grid gap-2 lg:grid-cols-12">
+      <div className="grid gap-4 lg:grid-cols-11">
         {/* Search */}
         <label className="input input-bordered flex items-center gap-2 rounded-2xl lg:col-span-3">
           <Search className="h-4 w-4 text-base-content/50" />
@@ -59,7 +58,7 @@ export default function SpacesToolbar({
           <input
             type="text"
             placeholder="Search spaces..."
-            className="grow"
+            className="grow w-full"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
           />
@@ -86,29 +85,6 @@ export default function SpacesToolbar({
           <option value="Studio">Studio</option>
 
           <option value="Event Venue">Event Venue</option>
-        </select>
-
-        {/* Location */}
-        <select
-          className="select select-bordered rounded-2xl lg:col-span-2"
-          value={filters.location ?? ""}
-          onChange={(e) =>
-            setFilters((prev) => ({
-              ...prev,
-              location: e.target.value,
-              page: 1,
-            }))
-          }
-        >
-          <option value="">All Locations</option>
-
-          <option value="London">London</option>
-
-          <option value="New York">New York</option>
-
-          <option value="Berlin">Berlin</option>
-
-          <option value="Tokyo">Tokyo</option>
         </select>
 
         {/* Rating */}
@@ -163,7 +139,7 @@ export default function SpacesToolbar({
         <button
           type="button"
           onClick={handleReset}
-          className="btn rounded-2xl border-0 bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl lg:col-span-1"
+          className="btn rounded-2xl border-0 bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl lg:col-span-2"
         >
           <RotateCcw className="h-4 w-4" />
           Reset

@@ -1,13 +1,14 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getAllSpaces,
   getFeaturedSpaces,
   getSpaceById,
   getRelatedSpaces,
+  createSpace,
 } from "@/services/space.service";
-import { SpaceFilters } from "@/types/space";
+import { CreateSpacePayload, SpaceFilters } from "@/types/space";
 
 // Featured Spaces
 export function useFeaturedSpaces() {
@@ -48,5 +49,25 @@ export function useRelatedSpaces(id: string) {
     queryFn: () => getRelatedSpaces(id),
     enabled: !!id,
     staleTime: 1000 * 60 * 5,
+  });
+}
+
+// Create Space
+export function useCreateSpace() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (space: CreateSpacePayload) =>
+      createSpace(space),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["spaces"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["featured-spaces"],
+      });
+    },
   });
 }

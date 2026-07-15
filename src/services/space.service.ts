@@ -3,6 +3,8 @@ import {
   PaginatedSpaces,
   Space,
   SpaceFilters,
+  CreateSpacePayload,
+  CreateSpaceResponse,
 } from "@/types/space";
 
 // Featured Spaces
@@ -36,6 +38,18 @@ export const getRelatedSpaces = async (
 ): Promise<Space[]> => {
   const { data } = await axiosInstance.get(
     `/api/spaces/related/${id}`
+  );
+
+  return data;
+};
+
+// Create Space
+export const createSpace = async (
+  space: CreateSpacePayload,
+): Promise<CreateSpaceResponse> => {
+  const { data } = await axiosInstance.post(
+    "/api/spaces",
+    space,
   );
 
   return data;

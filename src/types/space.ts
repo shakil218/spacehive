@@ -19,7 +19,6 @@ export interface Space {
 export interface SpaceFilters {
   search?: string;
   category?: string;
-  location?: string;
   rating?: number;
 
   // Sorting
@@ -36,4 +35,26 @@ export interface PaginatedSpaces {
   currentPage: number;
   totalPages: number;
   limit: number;
+}
+
+export interface CreateSpacePayload {
+  title: string;
+  shortDescription: string;
+  description: string;
+  imageUrl: string;
+  category: string;
+  location: string;
+  price: number;
+  capacity: number;
+  availableFrom: string;
+  hostName: string;
+  amenities: string[];
+  featured: boolean;
+  status: string;
+}
+
+export interface CreateSpaceResponse {
+  success: boolean;
+  message: string;
+  insertedId: string;
 }

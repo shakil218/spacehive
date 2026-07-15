@@ -13,7 +13,7 @@ const loggedOutLinks = [
 ];
 
 const loggedInExtraLinks = [
-  { href: "/items/add", label: "Add Space" },
+  { href: "/add-space", label: "Add Space" },
   { href: "/items/manage", label: "Manage Spaces" },
 ];
 
