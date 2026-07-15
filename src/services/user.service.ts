@@ -1,6 +1,5 @@
 import axiosInstance from "@/lib/axios";
 import {
-  User,
   UsersResponse,
   UpdateUserRoleResponse,
   UpdateUserStatusResponse,

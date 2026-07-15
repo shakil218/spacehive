@@ -132,7 +132,7 @@ export default function MyBookingsTable({
 
   return (
     <div className="overflow-x-auto rounded-3xl border border-base-300 bg-base-100 shadow-lg">
-      <table className="table">
+      <table className="table min-w-262.5 table-zebra">
         <thead className="bg-base-200">
           <tr>
             <th>#</th>
@@ -180,19 +180,19 @@ export default function MyBookingsTable({
                 <td>
                   <div className="flex items-center gap-4">
                     <Image
-                      src={booking.imageUrl}
-                      alt={booking.title}
-                      width={70}
-                      height={70}
-                      className="rounded-xl object-cover"
-                    />
+  src={booking.imageUrl}
+  alt={booking.title}
+  width={70}
+  height={70}
+  className="h-14 w-14 rounded-xl object-cover md:h-[70px] md:w-[70px]"
+/>
 
                     <div>
-                      <h2 className="font-semibold">
+                      <h2 className="text-sm font-semibold md:text-base">
                         {booking.title}
                       </h2>
 
-                      <p className="inline-flex items-center gap-1 text-sm text-base-content/60">
+                      <p className="inline-flex items-center gap-1 text-xs text-base-content/60 md:text-sm">
                         <MapPin size={12} />
                         {booking.location}
                       </p>
@@ -218,7 +218,7 @@ export default function MyBookingsTable({
                 {/* Payment */}
                 <td>
                   <span
-                    className={`badge ${
+                    className={`badge badge-sm md:badge-md ${
                       booking.paymentStatus ===
                       "paid"
                         ? "badge-success"
@@ -248,14 +248,14 @@ export default function MyBookingsTable({
 
                 {/* Actions */}
                 <td>
-                  <div className="flex flex-wrap justify-center gap-2">
+                  <div className="flex items-center gap-2 flex-row md:flex-wrap md:justify-center">
 
                     {/* Details */}
                     <button
                       onClick={() =>
                         onDetails?.(booking._id)
                       }
-                      className="btn btn-sm btn-outline btn-info"
+                      className="btn btn-xs md:btn-sm btn-outline btn-info"
                     >
                       <Eye size={16} />
                       Details
@@ -272,7 +272,7 @@ export default function MyBookingsTable({
                               booking
                             )
                           }
-                          className="btn btn-sm btn-success"
+                          className="btn btn-xs md:btn-sm btn-success"
                         >
                           <Download size={16} />
                           Invoice
@@ -291,7 +291,7 @@ export default function MyBookingsTable({
                             )
                           }
                           disabled={isCancelling}
-                          className="btn btn-sm btn-error"
+                          className="btn btn-xs md:btn-sm btn-error"
                         >
                           <XCircle size={16} />
 
@@ -311,7 +311,7 @@ export default function MyBookingsTable({
                           )
                         }
                         disabled={isDeleting}
-                        className="btn btn-sm btn-outline btn-error"
+                        className="btn btn-xs md:btn-sm btn-outline btn-error"
                       >
                         <Trash2 size={16} />
 

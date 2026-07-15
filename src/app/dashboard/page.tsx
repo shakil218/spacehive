@@ -7,7 +7,7 @@ import { useUserBookingStatistics } from "@/hooks/useBookings";
 import SummaryCards from "@/components/dashboard/SummaryCards";
 import UserBookingStatistics from "@/components/dashboard/UserBookingStatistics";
 
-export default function DashboardPage() {
+export default function UserDashboardPage() {
   const { data: session } = authClient.useSession();
 
   const userId = session?.user.id;
