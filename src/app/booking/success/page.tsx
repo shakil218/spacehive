@@ -21,7 +21,7 @@ export default function BookingSuccessPage() {
         <div className="mt-8 flex flex-col gap-3">
 
           <Link
-            href="/dashboard/bookings"
+            href="/dashboard/user/my-bookings"
             className="btn bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 text-white rounded-xl"
           >
             View My Bookings

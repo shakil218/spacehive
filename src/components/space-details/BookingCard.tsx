@@ -14,13 +14,19 @@ import {
 import { Space } from "@/types/space";
 import { useState } from "react";
 import BookingModal from "@/components/booking/BookingModal";
+import { useSession } from "@/lib/auth-client";
 
 interface BookingCardProps {
   space: Space;
 }
 
+interface UserWithRole {
+  role?: string;
+}
+
 export default function BookingCard({ space }: BookingCardProps) {
   const [open, setOpen] = useState(false);
+  const { data: session } = useSession();
 
   const today = new Date();
   const availableDate = new Date(space.availableFrom);
@@ -28,7 +34,10 @@ export default function BookingCard({ space }: BookingCardProps) {
   const isAvailable = availableDate <= today;
   const isFull = space.capacity <= 0;
 
-  const disabled = !isAvailable || isFull;
+  const user = session?.user as UserWithRole | undefined;
+  const isAdmin = user?.role === "admin";
+
+  const disabled = !!(!isAvailable || isFull || isAdmin);
 
   const diff = availableDate.getTime() - today.getTime();
 
@@ -136,11 +145,13 @@ export default function BookingCard({ space }: BookingCardProps) {
           onClick={() => setOpen(true)}
           className="btn mt-8 w-full rounded-2xl border-0 bg-linear-to-r from-violet-600 via-pink-500 to-amber-400 text-white disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isFull
-            ? "Fully Booked"
-            : !isAvailable
-              ? `Available in ${days} Days`
-              : "Book Now"}
+          {isAdmin
+          ? "Admin cannot book"
+          : isFull
+          ? "Fully Booked"
+          : !isAvailable
+          ? `Available in ${days} Days`
+          : "Book Now"}
         </button>
 
         <p className="mt-4 text-center text-sm text-base-content/60">

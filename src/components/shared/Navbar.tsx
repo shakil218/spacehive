@@ -38,13 +38,18 @@ const adminLinks = [
   },
 ];
 
+interface UserWithRole {
+  role?: string;
+}
+
 export default function Navbar() {
   const { data: session, isPending } = useSession();
   const router = useRouter();
   const pathname = usePathname();
 
   // Default role is "user"
-  const role = session?.user?.role ?? "user";
+  const user = session?.user as UserWithRole | undefined;
+  const role = user?.role ?? "user";
 
   const links = session
     ? [...loggedOutLinks, ...(role === "admin" ? adminLinks : userLinks)]

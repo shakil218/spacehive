@@ -33,14 +33,12 @@ export default function AddSpaceForm() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreateSpaceFormData>({
+  } = useForm({
     resolver: zodResolver(createSpaceSchema),
-
     defaultValues: {
       title: "",
       shortDescription: "",
       description: "",
-      imageUrl: "",
       category: "",
       location: "",
       price: 0,
@@ -49,7 +47,6 @@ export default function AddSpaceForm() {
       hostName: "",
       amenities: [],
       featured: false,
-      status: "approved",
     },
   });
 
@@ -76,8 +73,8 @@ export default function AddSpaceForm() {
       const payload = {
         ...data,
         imageUrl,
+        status: "approved",
       };
-      console.log("Form Data:", payload);
       createSpace(payload, {
         onSuccess: (response) => {
           toast.success(response.message);
@@ -400,18 +397,22 @@ export default function AddSpaceForm() {
                     <input
                       type="checkbox"
                       className="checkbox checkbox-primary"
-                      checked={field.value.includes(amenity)}
+                      checked={field.value?.includes(amenity) ?? false}
                       onChange={(e) => {
+                        // Ensure you use a fallback empty array if field.value is undefined
+                        const currentValues = field.value ?? [];
+
                         if (e.target.checked) {
-                          field.onChange([...field.value, amenity]);
+                          field.onChange([...currentValues, amenity]);
                         } else {
                           field.onChange(
-                            field.value.filter((item) => item !== amenity),
+                            currentValues.filter(
+                              (item: string) => item !== amenity,
+                            ),
                           );
                         }
                       }}
                     />
-
                     <span>{amenity}</span>
                   </label>
                 ))}

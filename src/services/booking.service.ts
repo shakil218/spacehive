@@ -2,7 +2,9 @@ import axiosInstance from "@/lib/axios";
 import { Booking, UserBookingStatisticsResponse } from "@/types/booking";
 
 // Create Booking
-export const createBooking = async (booking: Booking) => {
+export const createBooking = async (
+  booking: Omit<Booking, "_id" | "paymentStatus" | "bookingStatus">
+) => {
   const { data } = await axiosInstance.post("/api/bookings", booking);
   return data;
 };
