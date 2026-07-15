@@ -14,7 +14,7 @@ const loggedOutLinks = [
 
 const loggedInExtraLinks = [
   { href: "/add-space", label: "Add Space" },
-  { href: "/items/manage", label: "Manage Spaces" },
+  { href: "/dashboard/manage-users", label: "Manage Users" },
 ];
 
 export default function Navbar() {

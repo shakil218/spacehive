@@ -10,6 +10,20 @@ export const auth = betterAuth({
     // Optional: if you don't provide a client, database transactions won't be enabled.
     client,
   }),
+
+   user: {
+  additionalFields: {
+    role: {
+      type: "string",
+      defaultValue: "user",
+    },
+    status: {
+      type: "string",
+      defaultValue: "active",
+    },
+  },
+},
+
   //...other options
   emailAndPassword: {
     enabled: true,
